@@ -94,9 +94,8 @@ public class SpecialFrame extends Application implements Initializable {
                     PointData dataCursorPoint = features.printCoordinates();
                     java.awt.Color color=dataCursorPoint.getColor();
                     coordinatesField.setText(dataCursorPoint.getX() + ":" + dataCursorPoint.getY());
-                    System.out.println(color.getRed());
-                    colorPanel.setBackground(new Background(new BackgroundFill(Color.BROWN,CornerRadii.EMPTY, Insets.EMPTY)));
-                    //colorPanel.setBackground(new Background(new BackgroundFill(Color.color(25,78,25), CornerRadii.EMPTY, Insets.EMPTY)));
+                    //colorPanel.setBackground(new Background(new BackgroundFill(Color.BROWN,CornerRadii.EMPTY, Insets.EMPTY)));
+                    colorPanel.setBackground(new Background(new BackgroundFill(Color.rgb(color.getRed(),color.getGreen(),color.getBlue()), CornerRadii.EMPTY, Insets.EMPTY)));
                     //colorPanel.setBackground(new Background(new BackgroundFill(Color.color(color.getRed(),color.getGreen(),color.getBlue()), CornerRadii.EMPTY, Insets.EMPTY)));
                     try {
                         Thread.sleep(100);
