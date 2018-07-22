@@ -22,9 +22,13 @@ public class MouseFeatures {
         int x=0;
         int y=0;
 
+        Point point = MouseInfo.getPointerInfo().getLocation();
+        x = point.x;
+        y = point.y;
+
         return new int[]{x,y};
     }
     public void moveCursor(int x,int y){
-
+        robot.mouseMove(x,y);
     }
 }

@@ -12,13 +12,19 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SpecialFrame extends Application implements Initializable {
     private MouseFeatures features=new MouseFeatures();
+    static private ExecutorService ex;
+    private Stage stage;
+    static private boolean print;
     @FXML
     private Button startPrint;
     @FXML
@@ -31,14 +37,17 @@ public class SpecialFrame extends Application implements Initializable {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        stage=primaryStage;
         Parent parent=FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("view/SpecialFrame.fxml")));
-        primaryStage.setScene(new Scene(parent));
+        stage.setScene(new Scene(parent));
 
-        primaryStage.setResizable(false);
-        primaryStage.setWidth(250);
-        primaryStage.setHeight(150);
-        primaryStage.setTitle("Координаты курсора");
-        primaryStage.show();
+        stage.setResizable(false);
+        stage.setWidth(250);
+        stage.setHeight(150);
+        stage.setTitle("Координаты курсора");
+        stage.show();
+
+        stage.setOnCloseRequest(new ShutdownThreadPrint());
     }
 
     public int[] getCoordinates(){
@@ -64,12 +73,26 @@ public class SpecialFrame extends Application implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         startPrint.setOnAction(new StartPrintCoordinates());
         moveCursor.setOnAction(new MoveCursorToCoordinates());
+
     }
     public class StartPrintCoordinates implements EventHandler<ActionEvent>{
 
         @Override
         public void handle(ActionEvent event) {
-            features.printCoordinates();
+            print=true;
+            ex=Executors.newSingleThreadExecutor();
+            ex.submit(()->{
+                while (print) {
+                    int[] coordsCursor = features.printCoordinates();
+                    coordinatesField.setText(coordsCursor[0] + ":" + coordsCursor[1]);
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            ex.shutdown();
         }
     }
     public class MoveCursorToCoordinates implements EventHandler<ActionEvent>{
@@ -88,5 +111,10 @@ public class SpecialFrame extends Application implements Initializable {
             }
         }
     }
-
+    public class ShutdownThreadPrint implements EventHandler<WindowEvent>{
+        @Override
+        public void handle(WindowEvent event) {
+                print=false;
+            }
+    }
 }
