@@ -1,0 +1,5 @@
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<VBox fx:controller="ru.putnik.robotdotanalyser.SpecialFrame"
+      xmlns:fx="http://javafx.com/fxml" alignment="center">
+</VBox>
