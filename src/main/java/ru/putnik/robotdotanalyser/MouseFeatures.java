@@ -18,15 +18,16 @@ public class MouseFeatures {
             e.printStackTrace();
         }
     }
-    public int[] printCoordinates(){
+    public PointData printCoordinates(){
         int x=0;
         int y=0;
 
         Point point = MouseInfo.getPointerInfo().getLocation();
         x = point.x;
         y = point.y;
+        Color c=robot.getPixelColor(x,y);
 
-        return new int[]{x,y};
+        return new PointData(x,y,c);
     }
     public void moveCursor(int x,int y){
         robot.mouseMove(x,y);

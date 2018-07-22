@@ -6,11 +6,17 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -31,6 +37,8 @@ public class SpecialFrame extends Application implements Initializable {
     private Button moveCursor;
     @FXML
     private TextField coordinatesField;
+    @FXML
+    private Pane colorPanel;
     public static void main(String[] args) {
         launch();
     }
@@ -44,7 +52,7 @@ public class SpecialFrame extends Application implements Initializable {
         stage.setResizable(false);
         stage.setWidth(250);
         stage.setHeight(150);
-        stage.setTitle("РљРѕРѕСЂРґРёРЅР°С‚С‹ РєСѓСЂСЃРѕСЂР°");
+        stage.setTitle("Координаты курсора");
         stage.show();
 
         stage.setOnCloseRequest(new ShutdownThreadPrint());
@@ -58,9 +66,9 @@ public class SpecialFrame extends Application implements Initializable {
             coordinates[1]=Integer.parseInt(coordsLine.split(":")[1]);
         }else {
             Alert errorAlert=new Alert(Alert.AlertType.ERROR);
-            errorAlert.setContentText("РљРѕРѕСЂРґРёРЅР°С‚С‹ Р±С‹Р»Рё РІРІРµРґРµРЅС‹ РЅРµРІРµСЂРЅРѕ!");
-            errorAlert.setTitle("РћС€РёР±РєР°");
-            errorAlert.setHeaderText("РћС€РёР±РєР° РѕРїСЂРµРґРµР»РµРЅРёСЏ РєРѕРѕСЂРґРёРЅР°С‚");
+            errorAlert.setContentText("Координаты были введены неверно!");
+            errorAlert.setTitle("Ошибка");
+            errorAlert.setHeaderText("Ошибка определения координат");
             errorAlert.show();
             coordinatesField.setText("0:0");
             coordinates[0]=0;
@@ -83,8 +91,13 @@ public class SpecialFrame extends Application implements Initializable {
             ex=Executors.newSingleThreadExecutor();
             ex.submit(()->{
                 while (print) {
-                    int[] coordsCursor = features.printCoordinates();
-                    coordinatesField.setText(coordsCursor[0] + ":" + coordsCursor[1]);
+                    PointData dataCursorPoint = features.printCoordinates();
+                    java.awt.Color color=dataCursorPoint.getColor();
+                    coordinatesField.setText(dataCursorPoint.getX() + ":" + dataCursorPoint.getY());
+                    System.out.println(color.getRed());
+                    colorPanel.setBackground(new Background(new BackgroundFill(Color.BROWN,CornerRadii.EMPTY, Insets.EMPTY)));
+                    //colorPanel.setBackground(new Background(new BackgroundFill(Color.color(25,78,25), CornerRadii.EMPTY, Insets.EMPTY)));
+                    //colorPanel.setBackground(new Background(new BackgroundFill(Color.color(color.getRed(),color.getGreen(),color.getBlue()), CornerRadii.EMPTY, Insets.EMPTY)));
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
@@ -104,9 +117,9 @@ public class SpecialFrame extends Application implements Initializable {
                 features.moveCursor(coordinates[0], coordinates[1]);
             }else {
                 Alert errorAlert=new Alert(Alert.AlertType.WARNING);
-                errorAlert.setHeaderText("РџРѕР»Рµ РґР»СЏ РєРѕРѕСЂРґРёРЅР°С‚ РїСѓСЃС‚Рѕ");
-                errorAlert.setTitle("РћС€РёР±РєР°");
-                errorAlert.setContentText("Р”Р»СЏ РїРµСЂРµРЅРѕСЃР° РєСѓСЂСЃРѕСЂР° РЅСѓР¶РЅРѕ СѓРєР°Р·Р°С‚СЊ РєРѕРѕСЂРґРёРЅР°С‚С‹!");
+                errorAlert.setHeaderText("Поле для координат пусто");
+                errorAlert.setTitle("Ошибка");
+                errorAlert.setContentText("Для переноса курсора нужно указать координаты!");
                 errorAlert.show();
             }
         }
