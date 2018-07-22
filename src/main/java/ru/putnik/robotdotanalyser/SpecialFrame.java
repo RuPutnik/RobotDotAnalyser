@@ -23,7 +23,7 @@ public class SpecialFrame extends Application implements Initializable {
 
         primaryStage.setResizable(false);
         primaryStage.setWidth(250);
-        primaryStage.setHeight(100);
+        primaryStage.setHeight(150);
         primaryStage.setTitle("Координаты курсора");
         primaryStage.show();
     }
