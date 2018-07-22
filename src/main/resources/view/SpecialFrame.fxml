@@ -7,17 +7,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox alignment="CENTER" spacing="10.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.121" fx:controller="ru.putnik.robotdotanalyser.SpecialFrame">
+<VBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.putnik.robotdotanalyser.SpecialFrame">
    <children>
       <HBox alignment="CENTER" prefHeight="58.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <Button mnemonicParsing="false" text="Запуск" />
-            <Button mnemonicParsing="false" text="Переместить курсор" />
+            <Button fx:id="startPrint" mnemonicParsing="false" text="Запуск" />
+            <Button fx:id="moveCursor" mnemonicParsing="false" text="Переместить курсор" />
          </children>
       </HBox>
-      <Label text="Координаты курсора" />
-      <TextField />
+      <Label text="Координаты курсора (x:y)" />
+      <TextField fx:id="coordinatesField" />
    </children>
    <opaqueInsets>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
